@@ -3,11 +3,14 @@ import AppHeader from './../app-header';
 import SearchPanel from './../search-panel';
 import ItemStatusFilter from './../item-status-filter';
 import TodoList from './../todo-list';
+import ItemAddForm from './../item-add-form';
 import './app.css';
 
 export default class App extends Component {
   constructor() {
     super();
+
+    this.maxId = 100;
 
     this.state = {
       todoData: [
@@ -27,6 +30,22 @@ export default class App extends Component {
         };
       });
     };
+
+    this.addItem = (text) => {
+      const newItem = {
+        label: text,
+        important: false,
+        id: this.maxId++
+      };
+
+      this.setState(({ todoData }) => {
+        const newData = [...todoData, newItem];
+
+        return {
+          todoData: newData
+        };
+      });
+    };
   }
 
   render() {
@@ -40,6 +59,7 @@ export default class App extends Component {
           <ItemStatusFilter />
         </div>
         <TodoList todos={todoData} onDeleted={this.deleteItem}/>
+        <ItemAddForm onItemAdded={this.addItem}/>
       </div>
     );
   }
